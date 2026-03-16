@@ -21,22 +21,17 @@ public class Main {
         switch (opcao){
             case "1":
                 menuAlunos();
-//                if (isVazio(listaTurma)){
-//                    System.out.println("Não existe turmas!");
-//                    menuPrincipal();
-//                } else {
-//                    menuAlunos();
-//                }
+//
                break;
             case "2":
               menuTurmas();
               break;
             case "3":
-                System.out.println("Até a próxima 😘✌️");
+                System.out.println("Até a próxima️!");
                 System.exit(0);
                 break;
             default:
-                System.out.println("Opção inválida! Tente novamente 🤔");
+                System.out.println("Opção inválida! Tente novamente");
                 menuPrincipal();
 
         }
@@ -92,8 +87,13 @@ public class Main {
                 menuAlunos();
                 break;
             case "2":
-                cadastrarAluno();
-                menuAlunos();
+                if (isVazio(listaTurma)){
+                   System.out.println("Não existe turmas!");
+                 menuAlunos();
+              } else {
+                    cadastrarAluno();
+                    menuAlunos();
+                }
                 break;
             case "3":
                 atualizarAluno();
@@ -114,25 +114,13 @@ public class Main {
 
     }
 
-    private static void excluirAluno() {
-    }
-
-    private static void atualizarAluno() {
-        
-    }
 
 
 
-    private static void listarAlunos() {
-        if(listaAluno.isEmpty()){
-            System.out.println("Não há alunos cadastrados :( ");
-            menuAlunos();
-        }
-        for (Aluno a: listaAluno){
-            System.out.println(a);
-        }
-        
-    }
+
+
+
+
 
     private static void excluirTurma() {
         if(isVazio(listaTurma)){
@@ -150,6 +138,23 @@ public class Main {
 
     }
 
+    private static void excluirAluno(){
+        if (Isvazio(listaAluno)) {
+            System.out.println("Não há alunos cadastrados!");
+            return;
+
+        }
+        listarAlunoIndice();
+        int excluirAluno = validarIdAluno();
+
+        if (confirmaExclusao()){
+            listaAluno.get(excluirAluno).setAtivo(false);
+            System.out.println("Aluno excluido da lista com sucesso!");
+        }
+        }
+
+
+
     private static boolean isVazio(ArrayList<Turma> listaTurmas) {
         if (listaTurmas.isEmpty()) return true;
 
@@ -157,6 +162,14 @@ public class Main {
             if (turma.isAtivo()) return false;
         }
 
+        return true;
+    }
+
+    private static boolean Isvazio(ArrayList<Aluno>listaAluno){
+        if (listaAluno.isEmpty()) return true;
+        for (Aluno aluno : listaAluno){
+           if(aluno.Isativo()) return false;
+        }
         return true;
     }
 
@@ -199,6 +212,15 @@ public class Main {
             }
     }
 
+    private static void listarAlunoIndice(){
+        System.out.println("\nLista de alunos:");
+        for (int i=0;i<listaAluno.size();i++){
+            if (listaAluno.get(i).Isativo())
+                System.out.printf("\n%d - %s", i + 1, listaAluno.get(i).getNome());
+        }
+
+    }
+
     private static void atualizarTurma() {
         if(isVazio(listaTurma)){
             System.out.println("não há turmas cadastradas");
@@ -218,6 +240,62 @@ public class Main {
         atualizarParcial("sigla", idAtualizar);
 
     }
+    private static void atualizarAluno() {
+        if(Isvazio(listaAluno)){
+            System.out.println("não há alunos cadstrados");
+            return;
+        }
+
+        listarAlunoIndice();
+        int atualizarAlunoIndice = validarIdAluno();
+
+        System.out.printf("O nome atual é: %s", listaAluno.get(atualizarAlunoIndice).getNome());
+        atualizarParcialAluno("nome", atualizarAlunoIndice);
+
+        System.out.printf("A data de nascimento atual é: %s", listaAluno.get(atualizarAlunoIndice).getDataNascimento());
+        atualizarParcialAluno("Data de Nascimeno", atualizarAlunoIndice);
+
+        System.out.printf("A turma atual é: %s", listaAluno.get(atualizarAlunoIndice).getTurma());
+        atualizarParcialAluno("turma", atualizarAlunoIndice);
+
+    }
+
+    private static void atualizarParcialAluno (String atributo, int atualizarAlunoIndice){
+        boolean rodarNovamente = true;
+        while (rodarNovamente) {
+            String opcao= Leitura.dados("\nDeseja modificar a "+ atributo + "(S/N)?").toUpperCase();
+            switch (opcao) {
+                case "S":
+                    switch (atributo){
+                        case "nome":
+                           String nome  = validarNome();
+                            listaAluno.get(atualizarAlunoIndice).setNome(nome);
+                            break;
+                        case "curso":
+                           LocalDate dataNascimento = validarData();
+                            listaAluno.get(atualizarAlunoIndice).setDataNascimento(dataNascimento);
+                            break;
+                        case "turma":
+                            Turma turma  = validarTurma();
+                            listaAluno.get(atualizarAlunoIndice).setTurma(turma);
+                            break;
+                    }
+                    System.out.println(atributo + " atualizado com sucesso!");
+                    rodarNovamente = false;
+                    break;
+                case "N":
+                    rodarNovamente = false;
+                    break;
+                default:
+                    System.out.println("Opção inválida! Escolha S para SIM ou N para NÃO");
+
+            }
+
+        }
+    }
+
+
+
 
     private static void atualizarParcial (String atributo, int idAtualizar){
         boolean rodarNovamente = true;
@@ -312,6 +390,24 @@ public class Main {
         return opcaoValida;
     }
 
+    private static int validarIdAluno(){
+        String opcao = Leitura.dados("\nDigite o aluno que deseja: ");
+        int opcaoValida = -1;
+        int opcaoUsuario = -1;
+        while (opcaoValida == -1) {
+            opcaoUsuario = validarItemLista(opcao);
+
+            if (opcaoUsuario == -1) {
+                System.out.println("Opção inválida! Digite novamente:");
+                opcao = Leitura.dados("Digite o Id da turma que deseja:");
+            } else {
+                opcaoValida = opcaoUsuario;
+            }
+
+        }
+        return opcaoValida;
+    }
+
     private static void cadastrarTurma() {
 
         Periodo  periodo = validarPeriodo();
@@ -331,7 +427,7 @@ public class Main {
         Turma turma = validarTurma();
 
       Aluno aluno = new Aluno( nome, dataNascimento, turma);
-
+      listaAluno.add(aluno);
 
     }
 
@@ -356,7 +452,7 @@ public class Main {
     }
     private static Turma validarTurma() {
         int turmaAluno = turmaAluno();
-        System.out.printf("\nA turma escolhida é: %s", listaTurma.get(turmaAluno).getCurso());
+        System.out.printf("\nA turma escolhida é: %s\n",listaTurma.get(turmaAluno).getCurso());
 
         return listaTurma.get(turmaAluno);
     }
@@ -366,7 +462,7 @@ public class Main {
             String dataAluno = Leitura.dados("\nQual a data de nascimento do aluno? (dd/MM/yyyy)");
 
             if (!dataAluno.matches("\\d{2}/\\d{2}/\\d{4}")) {
-                System.out.println("Data inválida, digite sem letras ou caracteres especiais.");
+                System.out.println("Data inválida, digite uma data válida");
                 continue;
             }
 
@@ -477,6 +573,18 @@ public class Main {
             if (t.isAtivo())
                 System.out.println(t);
         }
+    }
+
+    private static void listarAlunos() {
+        if(Isvazio(listaAluno)){
+            System.out.println("Não há alunos cadastrados :( ");
+            menuAlunos();
+        }
+        for (Aluno a: listaAluno){
+            if (a.Isativo())
+                System.out.println(a);
+        }
+
     }
 
 }

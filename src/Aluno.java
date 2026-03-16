@@ -1,6 +1,32 @@
 import java.time.LocalDate;
 
+
+//public class Aluno {
+//    private String nome;
+//    private LocalDate dataNascimento;
+//   private Turma turma;
+//
+//}
+
+//public Aluno (String nome, LocalDate dataNascimento, Turma turma){
+//
+
+
 public class Aluno {
+    private String nome;
+    private LocalDate dataNascimento;
+    private Turma turma;
+    private boolean ativo;
+
+
+    public Aluno(String nome, LocalDate dataNascimento, Turma turma) {
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+        this.turma = turma;
+        this.ativo = true;
+}
+
+
     @Override
     public String toString() {
         return "Aluno{" +
@@ -8,6 +34,10 @@ public class Aluno {
                 ", dataNascimento=" + dataNascimento +
                 ", turma=" + turma +
                 '}';
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 
     public String getNome() {
@@ -33,10 +63,13 @@ public class Aluno {
     public void setTurma(Turma turma) {
         this.turma = turma;
     }
+    public boolean Isativo() {
+        return ativo;
+    }
 
-    private String nome;
-    private LocalDate dataNascimento;
-    private Turma turma;
-}
+    }
+
+
+
 
 
