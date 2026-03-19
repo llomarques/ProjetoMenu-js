@@ -15,7 +15,7 @@ public class Main {
         System.out.println("=== Secretaria ===");
         System.out.println("1 - Alunos");
         System.out.println("2 - Turmas");
-        System.out.println("3 - Sair");
+        System.out.println("0 - Sair");
         String opcao = Leitura.dados("Digite a opção desejada:");
 
         switch (opcao){
@@ -26,7 +26,7 @@ public class Main {
             case "2":
               menuTurmas();
               break;
-            case "3":
+            case "0":
                 System.out.println("Até a próxima️!");
                 System.exit(0);
                 break;
@@ -44,9 +44,14 @@ public class Main {
         System.out.println("2 - Cadastrar Turma");
         System.out.println("3 - Atualizar Turma");
         System.out.println("4 - Excluir turma");
-        System.out.println("5 - Voltar ao menu principal");
+        System.out.println("5 - Listar aluno por turma");
+        System.out.println("0 - Voltar ao menu principal");
         String opcao = Leitura.dados("Digite a opção desejada:");
         switch (opcao){
+            case "0":
+                menuPrincipal();
+                break;
+
             case "1":
                 listarTurmas();
                 menuTurmas();
@@ -64,10 +69,11 @@ public class Main {
                 menuTurmas();
                 break;
             case "5":
-                menuPrincipal();
-                break;
+               listarAlunosTurmas();
+               menuTurmas();
+               break;
             default:
-                System.out.println("Opção inválida! Tente novamente 🤔");
+                System.out.println("Opção inválida! Tente novamente");
                 menuTurmas();
 
         }
@@ -79,9 +85,13 @@ public class Main {
         System.out.println("2 - Cadastrar Aluno");
         System.out.println("3 - Atualizar Aluno");
         System.out.println("4 - Excluir Aluno");
-        System.out.println("5 - Voltar ao menu principal");
+        System.out.println("0 - Voltar ao menu principal");
         String opcao = Leitura.dados("Digite a opção desejada:");
         switch (opcao){
+
+            case "0":
+                menuPrincipal();
+                break;
             case "1":
                 listarAlunos();
                 menuAlunos();
@@ -103,23 +113,13 @@ public class Main {
                 excluirAluno();
                 menuAlunos();
                 break;
-            case "5":
-                menuPrincipal();
-                break;
             default:
-                System.out.println("Opção inválida! Tente novamente 🤔");
+                System.out.println("Opção inválida! Tente novamente");
                 menuAlunos();
 
         }
 
     }
-
-
-
-
-
-
-
 
 
     private static void excluirTurma() {
@@ -293,9 +293,6 @@ public class Main {
 
         }
     }
-
-
-
 
     private static void atualizarParcial (String atributo, int idAtualizar){
         boolean rodarNovamente = true;
@@ -502,12 +499,6 @@ public class Main {
         return true;
     }
 
-
-    //private static Turma TurmaAluno() {
-    //}
-
-
-
     private static String validarNome() {
         String nome = Leitura.dados("\nQual o nome do aluno?");
        while (!isCharacter(nome)){
@@ -530,10 +521,10 @@ public class Main {
 
     private static boolean isCharacter(String texto) {
          String textoSemNumeros = texto.replaceAll("\\d", "");
-         return !texto.isBlank() && texto.equals(textoSemNumeros);
+         String textoSemCaracteres=texto.replaceAll("[^\\p{L}\\p{Nd}\\s]", "");
+         return !texto.isBlank() && texto.equals(textoSemNumeros) && texto.equals(textoSemCaracteres);
 
     }
-
 
 
     private static Periodo validarPeriodo() {
@@ -584,6 +575,35 @@ public class Main {
             if (a.Isativo())
                 System.out.println(a);
         }
+
+    }
+
+    private static void listarAlunosTurmas(){
+
+        if(isVazio(listaTurma)){
+            System.out.println("Não há turmas cadastradas");
+            menuTurmas();
+        }
+        listarTurmasIndiceSigla();
+        int idTurma = validaIdTurma();
+        Turma turma = listaTurma.get(idTurma);
+        if(Isvazio(listaAluno)){
+            System.out.println("Não há alunos cadastrados :( ");
+            menuAlunos();
+        }
+
+        for (Aluno a: listaAluno){
+            if (a.Isativo()) {
+                if(a.getTurma() == turma) {
+
+                    System.out.printf(a.getTurma().getCurso());
+                    System.out.println(a);
+                }
+            }
+        }
+
+
+
 
     }
 
