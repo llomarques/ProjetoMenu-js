@@ -2,7 +2,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Main {
     private static ArrayList<Aluno> listaAluno = new ArrayList<>();
@@ -139,7 +138,7 @@ public class Main {
     }
 
     private static void excluirAluno(){
-        if (Isvazio(listaAluno)) {
+        if (vazioAlunos(listaAluno)) {
             System.out.println("Não há alunos cadastrados!");
             return;
 
@@ -165,7 +164,7 @@ public class Main {
         return true;
     }
 
-    private static boolean Isvazio(ArrayList<Aluno>listaAluno){
+    private static boolean vazioAlunos(ArrayList<Aluno>listaAluno){
         if (listaAluno.isEmpty()) return true;
         for (Aluno aluno : listaAluno){
            if(aluno.Isativo()) return false;
@@ -241,7 +240,7 @@ public class Main {
 
     }
     private static void atualizarAluno() {
-        if(Isvazio(listaAluno)){
+        if(vazioAlunos(listaAluno)){
             System.out.println("não há alunos cadstrados");
             return;
         }
@@ -567,7 +566,7 @@ public class Main {
     }
 
     private static void listarAlunos() {
-        if(Isvazio(listaAluno)){
+        if(vazioAlunos(listaAluno)){
             System.out.println("Não há alunos cadastrados :( ");
             menuAlunos();
         }
@@ -587,7 +586,7 @@ public class Main {
         listarTurmasIndiceSigla();
         int idTurma = validaIdTurma();
         Turma turma = listaTurma.get(idTurma);
-        if(Isvazio(listaAluno)){
+        if(vazioAlunos(listaAluno)){
             System.out.println("Não há alunos cadastrados :( ");
             menuAlunos();
         }
